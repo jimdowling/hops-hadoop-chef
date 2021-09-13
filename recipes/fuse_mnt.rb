@@ -21,16 +21,16 @@ end
 
 directory node['hops']['fuse']['staging_folder'] do
   action :create
-  owner node['hops']['hdfs']['user']
-  group node['hops']['group']
+  owner node['hops']['fuse']['user']
+  group node['hops']['fuse']['group']
   mode "0750"
   recursive true
 end
 
 directory node['hops']['fuse']['mount_point'] do
   action :create
-  owner node['hops']['hdfs']['user']
-  group node['hops']['group']
+  owner node['hops']['fuse']['user']
+  group node['hops']['fuse']['group']
   mode "0700"
   recursive true
 end
@@ -67,22 +67,22 @@ else
 end
 
 # creating script to mount FS
-template "#{node['hops']['sbin_dir']}/mount-hopsfs.sh" do
+template "#{node['hops']['sbin_dir']}/mount-#{node['hops']['fuse']['service']}.sh" do
   source "mount-hopsfs.sh.erb"
-  owner node['hops']['hdfs']['user']
-  group node['hops']['group']
+  owner node['hops']['fuse']['user']
+  group node['hops']['fuse']['group']
   mode "750"
   variables({
     :nn_address => rpc_namenode_fqdn,
-    :fuse_mount_bin => "#{node['hops']['sbin_dir']}/hops-fuse-mount"
+    :fuse_mount_bin => "#{node['hops']['sbin_dir']}/#{node['hops']['fuse']['service']}-fuse-mount"
   })
   action :create
 end
 
-template "#{node['hops']['sbin_dir']}/umount-hopsfs.sh" do
+template "#{node['hops']['sbin_dir']}/umount-#{node['hops']['fuse']['service']}.sh" do
   source "umount-hopsfs.sh.erb"
-  owner node['hops']['hdfs']['user']
-  group node['hops']['group']
+  owner node['hops']['fuse']['user']
+  group node['hops']['fuse']['group']
   mode "750"
   variables({
     :nn_address => rpc_namenode_fqdn,
@@ -92,7 +92,7 @@ template "#{node['hops']['sbin_dir']}/umount-hopsfs.sh" do
 end
 
 # create service for it
-service_name="hopsfsmount"
+service_name = node['hops']['fuse']['service_name']
 deps = ""
 if service_discovery_enabled()
   deps += "consul.service "
@@ -135,6 +135,6 @@ end
 if node['kagent']['enabled'] == "true"
   kagent_config service_name do
     service "HDFS"
-    log_file "#{node['hops']['logs_dir']}/fuse-mount.log"
+    log_file "#{node['hops']['logs_dir']}/#{service_name}-mount.log"
   end
 end

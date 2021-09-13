@@ -84,7 +84,10 @@ default['hops']['dist_url']                    = node['hops']['root_url'] + "/ho
 default['hops']['fuse']['dist_url']            = node['hops']['root_url'] + "/hops-fuse-mount-" + node['hops']['fuse']['version'] 
 default['hops']['fuse']['staging_folder']      = node['hops']['dir'] + "/hops-staging"
 default['hops']['fuse']['mount_point']         = "/hopsfs" 
-
+default['hops']['fuse']['user']                = node['hops']['hdfs']['user']
+default['hops']['fuse']['group']               = node['hops']['group']
+default['hops']['fuse']['service']             = ['hops']['fuse']['service']
+default['hops']['fuse']['service_name']        = ['hops']['fuse']['service'] + "-mount"
 
 default['hops']['install_protobuf']            = "false"
 default['hops']['protobuf_url']                = "https://protobuf.googlecode.com/files/protobuf-2.5.0.tar.gz"

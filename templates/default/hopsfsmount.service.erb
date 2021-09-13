@@ -1,14 +1,14 @@
 [Unit]
-Description = HopsFS fuse mount
+Description = <%= node['hops']['fuse']['service'] %> fuse mount
 After = syslog.target network.target remote-fs.target <%= @deps %>
 StartLimitIntervalSec=120
 StartLimitBurst=15
 
 [Service]
-User = <%= node['hops']['hdfs']['user'] %>
-PIDFile = <%= node['hops']['logs_dir'] %>/hadoop-<%= node['hops']['hdfs']['user'] %>-hopsfsmount.pid
-ExecStart = <%= node['hops']['sbin_dir'] %>/mount-hopsfs.sh
-ExecStop = <%= node['hops']['sbin_dir'] %>/umount-hopsfs.sh
+User = <%= node['hops']['fuse']['user'] %>
+PIDFile = <%= node['hops']['logs_dir'] %>/hadoop-<%= node['hops']['fuse']['user'] %>-<%= node['hops']['fuse']['service'] %>mount.pid
+ExecStart = <%= node['hops']['sbin_dir'] %>/mount-<%= node['hops']['fuse']['service'] %>.sh
+ExecStop = <%= node['hops']['sbin_dir'] %>/umount-<%= node['hops']['fuse']['service'] %>.sh
 LimitNOFILE = 20000
 Type = forking
 

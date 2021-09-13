@@ -4,7 +4,7 @@ set -e
 
 mount_point=<%= node['hops']['fuse']['mount_point'] %>
 mount_bin="<%= @fuse_mount_bin %>"
-common_params="--logFile <%= node['hops']['logs_dir']%>/fuse-mount.log --numConnections 3 --logLevel info --stageDir <%= node['hops']['fuse']['staging_folder'] %>  <%= @nn_address %>:<%= node['hops']['nn']['port'] %>  <%= node['hops']['fuse']['mount_point'] %>    2>&1"
+common_params="--logFile <%= node['hops']['logs_dir']%>/<%= node['hops']['fuse']['service'] %>fuse-mount.log --numConnections 3 --logLevel info --stageDir <%= node['hops']['fuse']['staging_folder'] %>  <%= @nn_address %>:<%= node['hops']['nn']['port'] %>  <%= node['hops']['fuse']['mount_point'] %>    2>&1"
 
 <% if node['hops']['tls']['enabled'].casecmp?("true") -%>
 command="$mount_bin  -tls $common_params"
@@ -13,9 +13,9 @@ command="$mount_bin  $common_params"
 <% end %>
 
 
-PIDFile=<%= node['hops']['logs_dir'] %>/hadoop-<%= node['hops']['hdfs']['user'] %>-hopsfsmount.pid
+PIDFile=<%= node['hops']['logs_dir'] %>/hadoop-<%= node['hops']['fuse']['user'] %>-<%= node['hops']['fuse']['service'] %>mount.pid
 bash -c "nohup $command &"
-pid=$(pgrep hops-fuse-mount)
+pid=$(pgrep <%= node['hops']['fuse']['service'] %>-mount)
 echo $pid > $PIDFile
 
 sleep 3

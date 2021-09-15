@@ -77,7 +77,7 @@ template "#{node['hops']['sbin_dir']}/mount-#{node['hops']['fuse']['service']}.s
   mode "750"
   variables({
     :nn_address => rpc_namenode_fqdn,
-    :fuse_mount_bin => "#{node['hops']['sbin_dir']}/#{node['hops']['fuse']['service']}-fuse-mount"
+    :fuse_mount_bin => "#{node['hops']['sbin_dir']}/hops-fuse-mount"
   })
   action :create
 end

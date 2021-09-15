@@ -71,7 +71,7 @@ end
 
 # creating script to mount FS
 template "#{node['hops']['sbin_dir']}/mount-#{node['hops']['fuse']['service']}.sh" do
-  source "mounthopsfs.sh.erb"
+  source "mount-hopsfs.sh.erb"
   owner node['hops']['fuse']['user']
   group node['hops']['fuse']['group']
   mode "750"

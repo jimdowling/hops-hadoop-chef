@@ -1,5 +1,8 @@
 include_recipe "hops::default"
 
+# create service for it
+service_name = node['hops']['fuse']['service_name']
+
 # Intall the needed packages
 case node['platform_family']
 when 'debian'
@@ -68,7 +71,7 @@ end
 
 # creating script to mount FS
 template "#{node['hops']['sbin_dir']}/mount-#{node['hops']['fuse']['service']}.sh" do
-  source "mount-hopsfs.sh.erb"
+  source "mounthopsfs.sh.erb"
   owner node['hops']['fuse']['user']
   group node['hops']['fuse']['group']
   mode "750"
@@ -91,8 +94,6 @@ template "#{node['hops']['sbin_dir']}/umount-#{node['hops']['fuse']['service']}.
   action :create
 end
 
-# create service for it
-service_name = node['hops']['fuse']['service_name']
 deps = ""
 if service_discovery_enabled()
   deps += "consul.service "
@@ -115,12 +116,12 @@ when "debian"
 end
 
 template systemd_script do
-  source "#{service_name}.service.erb"
+  source "hopsfsmount.service.erb"
   owner "root"
   group "root"
   mode 0664
   variables({
-            :deps => deps
+              :deps => deps
             })
   action :create
   if node['services']['enabled'] == "true"

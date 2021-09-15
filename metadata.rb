@@ -22,7 +22,7 @@ recipe            "hops::client", "Installs libaries and configuration files for
 recipe            "hops::purge", "Removes all hops-hadoop files and dirs and ndb-dal, but doesnt drop hops db from NDB"
 recipe            "hops::_config", "Internal recipe for setting config values"
 recipe            "hops::fuse_mnt", "Mounts '/' on HopsFS as '/hops/hopsfs' "
-recipe            "hops::airflow_mnt", "Mounts '/' on HopsFS as '/hops/hopsfs' "
+recipe            "hops::airflow_mnt", "Mounts '/airflow' on HopsFS as '/hops/airflow/dags' "
 
 depends 'magic_shell', '~> 1.0.0'
 depends 'sysctl', '~> 1.0.3'
